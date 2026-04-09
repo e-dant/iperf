@@ -3648,6 +3648,8 @@ iperf_reset_test(struct iperf_test *test)
     test->settings->dont_fragment = 0;
     test->zerocopy = 0;
     test->settings->skip_rx_copy = 0;
+    test->repeating_payload = 0;
+    test->data_integrity = 0;
 
 #if defined(HAVE_SSL)
     if (test->settings->authtoken) {
