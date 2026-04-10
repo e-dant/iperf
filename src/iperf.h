@@ -228,6 +228,7 @@ struct iperf_stream
     int       buffer_fd;	/* data to send, file descriptor */
     char      *buffer;		/* data to send, mmapped */
     int       pending_size;     /* pending data to send */
+    int       pending_offset;   /* offset into buffer for next send (partial-send resume) */
     int       diskfile_fd;	/* file to send, file descriptor */
     int	      diskfile_left;	/* remaining file data on disk */
 

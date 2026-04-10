@@ -4915,6 +4915,7 @@ iperf_new_stream(struct iperf_test *test, int s, int sender)
         return NULL;
     }
     sp->pending_size = 0;
+    sp->pending_offset = 0;
 
     /* Set socket */
     sp->socket = s;
@@ -5177,6 +5178,7 @@ diskfile_send(struct iperf_stream *sp)
 	memcpy(sp->buffer,
 	       sp->buffer + (sp->test->settings->blksize - sp->diskfile_left),
 	       sp->diskfile_left);
+	sp->pending_offset = 0;  /* data slid to front of buffer */
 	if (sp->test->debug)
 	    printf("Shifting %d bytes by %d\n", sp->diskfile_left, (sp->test->settings->blksize - sp->diskfile_left));
     }

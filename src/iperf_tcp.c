@@ -168,6 +168,7 @@ iperf_tcp_send(struct iperf_stream *sp)
 
     if (!sp->pending_size) {
 	      sp->pending_size = sp->settings->blksize;
+	      sp->pending_offset = 0;
         if (sp->test->data_integrity) {
             uint32_t seq = htonl(sp->integrity_block_seq++);
             uint32_t crc = htonl(sp->integrity_payload_crc);
@@ -177,14 +178,15 @@ iperf_tcp_send(struct iperf_stream *sp)
     }
 
     if (sp->test->zerocopy)
-	      r = Nsendfile(sp->buffer_fd, sp->socket, sp->buffer, sp->pending_size);
+	      r = Nsendfile(sp->buffer_fd, sp->socket, sp->pending_offset, sp->pending_size);
     else
-	      r = Nwrite(sp->socket, sp->buffer, sp->pending_size, Ptcp);
+	      r = Nwrite(sp->socket, sp->buffer + sp->pending_offset, sp->pending_size, Ptcp);
 
     if (r < 0)
         return r;
 
     sp->pending_size -= r;
+    sp->pending_offset += r;
     sp->result->bytes_sent += r;
     sp->result->bytes_sent_this_interval += r;
 
