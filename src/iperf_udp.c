@@ -251,6 +251,7 @@ iperf_udp_recv(struct iperf_stream *sp)
 	                    "CRC mismatch - expected 0x%08x, got 0x%08x",
 	                    sp->socket, pcount, recv_crc, computed_crc);
 	                i_errno = IEDATAINTEGRITY;
+	                sp->test->data_integrity_error = 1;
 	                sp->test->done = 1;
 	                return -1;
 	            }
@@ -260,6 +261,7 @@ iperf_udp_recv(struct iperf_stream *sp)
 	                    "sequence mismatch - expected %u, got %u",
 	                    sp->socket, pcount, sp->integrity_block_seq, recv_seq);
 	                i_errno = IEDATAINTEGRITY;
+	                sp->test->data_integrity_error = 1;
 	                sp->test->done = 1;
 	                return -1;
 	            }

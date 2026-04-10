@@ -2775,6 +2775,9 @@ send_results(struct iperf_test *test)
 	    }
 	}
 
+	if (test->data_integrity_error)
+	    cJSON_AddTrueToObject(j, "data_integrity_error");
+
 	j_streams = cJSON_CreateArray();
 	if (j_streams == NULL) {
 	    i_errno = IEPACKAGERESULTS;
@@ -3010,6 +3013,12 @@ get_results(struct iperf_test *test)
 	j_remote_congestion_used = iperf_cJSON_GetObjectItemType(j, "congestion_used", cJSON_String);
 	if (j_remote_congestion_used != NULL) {
 	    test->remote_congestion_used = strdup(j_remote_congestion_used->valuestring);
+	}
+
+	if (cJSON_GetObjectItem(j, "data_integrity_error") != NULL) {
+	    test->data_integrity_error = 1;
+	    i_errno = IEDATAINTEGRITY;
+	    iperf_err(test, "data integrity error reported by remote side");
 	}
 
 	cJSON_Delete(j);
@@ -3335,6 +3344,7 @@ iperf_defaults(struct iperf_test *testp)
     testp->settings->rcv_timeout.usecs = (DEFAULT_NO_MSG_RCVD_TIMEOUT % SEC_TO_mS) * mS_TO_US;
     testp->zerocopy = 0;
     testp->data_integrity = 0;
+    testp->data_integrity_error = 0;
     testp->settings->skip_rx_copy = 0;
     testp->settings->cntl_ka = 0;
     testp->settings->cntl_ka_keepidle = 0;
@@ -3650,6 +3660,7 @@ iperf_reset_test(struct iperf_test *test)
     test->settings->skip_rx_copy = 0;
     test->repeating_payload = 0;
     test->data_integrity = 0;
+    test->data_integrity_error = 0;
 
 #if defined(HAVE_SSL)
     if (test->settings->authtoken) {

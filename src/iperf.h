@@ -378,6 +378,7 @@ struct iperf_test
     int	      multisend;
     int	      repeating_payload;                /* --repeating-payload */
     int	      data_integrity;                   /* --data-integrity */
+    int	      data_integrity_error;             /* set when integrity check fails */
     int       timestamps;			/* --timestamps */
     char     *timestamp_format;
     int       mptcp;				/* -m, --mptcp */

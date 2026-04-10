@@ -127,6 +127,7 @@ iperf_tcp_recv(struct iperf_stream *sp)
                             "expected 0x%08x, got 0x%08x",
                             sp->socket, recv_seq, recv_crc, computed_crc);
                         i_errno = IEDATAINTEGRITY;
+                        sp->test->data_integrity_error = 1;
                         sp->test->done = 1;
                         return -1;
                     }
@@ -136,6 +137,7 @@ iperf_tcp_recv(struct iperf_stream *sp)
                             "expected %u, got %u",
                             sp->socket, sp->integrity_block_seq, recv_seq);
                         i_errno = IEDATAINTEGRITY;
+                        sp->test->data_integrity_error = 1;
                         sp->test->done = 1;
                         return -1;
                     }
