@@ -569,6 +569,9 @@ iperf_strerror(int int_errno)
         case IEDATAINTEGRITYSKIPRXCOPY:
             snprintf(errstr, len, "--data-integrity and --skip-rx-copy are mutually exclusive");
             break;
+        case IEDATAINTEGRITYZEROCOPY:
+            snprintf(errstr, len, "--data-integrity and --zerocopy are mutually exclusive");
+            break;
 	    default:
             snprintf(errstr, len, "int_errno=%d", int_errno);
             perr = 1;

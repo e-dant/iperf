@@ -2016,6 +2016,15 @@ iperf_parse_arguments(struct iperf_test *test, int argc, char **argv)
         return -1;
     }
 
+    /* --data-integrity is incompatible with --zerocopy (-Z).
+     * sendfile() references page cache pages directly; the integrity
+     * header written via mmap is overwritten before the kernel
+     * transmits the previous block, causing sequence/CRC mismatches. */
+    if (test->data_integrity && test->zerocopy) {
+        i_errno = IEDATAINTEGRITYZEROCOPY;
+        return -1;
+    }
+
     /* For subsequent calls to getopt */
 #ifdef __APPLE__
     optreset = 1;

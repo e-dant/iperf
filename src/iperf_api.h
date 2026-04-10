@@ -449,6 +449,7 @@ enum {
     IEMAXSERVERTESTDURATIONEXCEEDED = 37, // Client's duration exceeds server's maximum duration
     IEUNITVAL = 38,         // Invalid unit value or suffix
     IEDATAINTEGRITYSKIPRXCOPY = 39, // --data-integrity and --skip-rx-copy are mutually exclusive
+    IEDATAINTEGRITYZEROCOPY = 40,   // --data-integrity and --zerocopy are mutually exclusive
     /* Test errors */
     IENEWTEST = 100,        // Unable to create a new test (check perror)
     IEINITTEST = 101,       // Test initialization failed (check perror)
